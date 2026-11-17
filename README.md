@@ -123,7 +123,7 @@ pnpm run build
 1. Push this repo, including `render.yaml` and `package-lock.json`, to GitHub or GitLab.
 2. Run `npm run shopify app env show` to get `SHOPIFY_API_KEY`, `SHOPIFY_API_SECRET`, and `SCOPES`.
 3. In the Render Dashboard, click **New > Blueprint** and select the repo.
-4. Enter the three values from step 2. For `SHOPIFY_APP_URL`, enter `https://shopify-app.onrender.com` (adjust if Render assigns a different subdomain).
+4. Enter the three values from step 2. For `SHOPIFY_APP_URL`, enter a placeholder; you get the real `https://jn-onsight-shopify-web-xxxx.onrender.com` URL after the first deploy.
 5. Click **Deploy Blueprint**. The web service runs `prisma migrate deploy` on every start.
 6. If the assigned URL differs from what you entered, update `SHOPIFY_APP_URL` on the web service and save.
 7. In `shopify.app.toml`, set `application_url` to the Render URL and set `[auth] redirect_urls` to `<url>/auth/callback`.
