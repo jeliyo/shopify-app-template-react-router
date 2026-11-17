@@ -116,6 +116,25 @@ Using pnpm:
 pnpm run build
 ```
 
+## Deploy to Render
+
+`render.yaml` creates a Docker web service, a BullMQ background worker (same image, `npm run worker`), Render Postgres, and Render Key Value.
+
+1. Push this repo, including `render.yaml` and `package-lock.json`, to GitHub or GitLab.
+2. Run `npm run shopify app env show` to get `SHOPIFY_API_KEY`, `SHOPIFY_API_SECRET`, and `SCOPES`.
+3. In the Render Dashboard, click **New > Blueprint** and select the repo.
+4. Enter the three values from step 2. For `SHOPIFY_APP_URL`, enter `https://shopify-app.onrender.com` (adjust if Render assigns a different subdomain).
+5. Click **Deploy Blueprint**. The web service runs `prisma migrate deploy` on every start.
+6. If the assigned URL differs from what you entered, update `SHOPIFY_APP_URL` on the web service and save.
+7. In `shopify.app.toml`, set `application_url` to the Render URL and set `[auth] redirect_urls` to `<url>/auth/callback`.
+8. Run `npm run deploy` (`shopify app deploy`) to push the URLs and webhooks to Shopify.
+9. Install the app on a dev store, then uninstall it. The worker logs should show `[worker] app uninstalled from <shop>`.
+
+Untested:
+- Deploying the Blueprint to Render, and the Shopify OAuth install flow against the Render URL.
+- `shopify app dev` locally: it now needs a Postgres `DATABASE_URL` (SQLite is gone). `REDIS_URL` is optional; jobs are skipped without it.
+- Extensions: none are in this repo, so none were exercised.
+
 ## Hosting
 
 When you're ready to set up your app in production, you can follow [our deployment documentation](https://shopify.dev/docs/apps/launch/deployment) to host it externally. From there, you have a few options:
