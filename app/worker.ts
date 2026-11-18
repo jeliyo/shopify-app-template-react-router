@@ -22,6 +22,16 @@ const worker = new Worker(
   QUEUE_NAME,
   async (job: Job) => {
     switch (job.name) {
+      case "award-loyalty-points": {
+        // Example job: 1 point per whole unit of currency. A real app would
+        // write the points to Postgres and call the Admin API here.
+        const { shop, orderNumber, totalPrice, currency, customerId } = job.data;
+        const points = Math.floor(Number(totalPrice ?? 0));
+        console.log(
+          `[worker] order #${orderNumber} on ${shop}: ${totalPrice} ${currency} -> ${points} loyalty points for customer ${customerId}`,
+        );
+        return;
+      }
       case "app-uninstalled":
         // Example job: replace with real cleanup (billing, data retention, etc).
         console.log(`[worker] app uninstalled from ${job.data.shop}`, job.data);
